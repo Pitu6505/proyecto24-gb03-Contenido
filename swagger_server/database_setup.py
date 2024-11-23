@@ -5,6 +5,7 @@ from sqlalchemy.orm import class_mapper
 from datetime import datetime
 
 
+
 # Crear una clase base para las tablas
 Base = declarative_base()
 
