@@ -1,0 +1,825 @@
+openapi: 3.0.0
+info:
+  title: Microservicio de Contenido
+  description: "API para gestionar el contenido, episodios, actores y géneros."
+  version: 1.0.0
+servers:
+- url: http://localhost:8080/api
+tags:
+- name: Contenidos
+  description: Todas las operaciones relacionadas con los contenidos
+  externalDocs:
+    description: Find out more
+    url: http://swagger.io
+- name: Episodios
+  description: Todas las operaciones relacionadas con los episodios
+- name: Actor
+  description: Todas las operaciones relacionadas con los actores
+- name: Genero
+  description: Todas las operaiones relacionadas con los generos
+paths:
+  /contenidos:
+    get:
+      tags:
+      - Contenidos
+      summary: Obtener todos los contenidos
+      operationId: contenidos_get
+      responses:
+        "200":
+          description: Lista de contenidos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contenido'
+                x-content-type: application/json
+      x-openapi-router-controller: swagger_server.controllers.contenidos_controller
+    put:
+      tags:
+      - Contenidos
+      summary: Actualizar un contenido con actores y géneros asociados
+      description: "Actualiza los datos de un contenido existente, incluyendo sus\
+        \ relaciones con actores y géneros."
+      operationId: contenidos_put
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/contenidos_body'
+        required: true
+      responses:
+        "200":
+          description: Contenido actualizado con actores y géneros asociados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contenido'
+        "404":
+          description: Contenido no encontrado
+      x-openapi-router-controller: swagger_server.controllers.contenidos_controller
+    post:
+      tags:
+      - Contenidos
+      summary: Crear un nuevo contenido con actores y géneros
+      description: Crea un contenido nuevo y asocia múltiples actores y géneros.
+      operationId: contenidos_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/contenidos_body_1'
+        required: true
+      responses:
+        "201":
+          description: Contenido creado con actores y géneros asociados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contenido'
+      x-openapi-router-controller: swagger_server.controllers.contenidos_controller
+  /contenidos/{id_contenido}/generos:
+    get:
+      tags:
+      - Contenidos
+      summary: Obtener todos los géneros asociados a un contenido
+      description: Devuelve una lista de géneros asociados al contenido especificado
+        por su ID.
+      operationId: contenidos_id_contenido_generos_get
+      parameters:
+      - name: id_contenido
+        in: path
+        description: ID del contenido para el cual se desean obtener los géneros asociados
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Lista de géneros asociados al contenido
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Genero'
+                x-content-type: application/json
+        "404":
+          description: Contenido no encontrado o sin géneros asociados
+      x-openapi-router-controller: swagger_server.controllers.contenidos_controller
+  /contenidos/{id_contenido}/actores:
+    get:
+      tags:
+      - Contenidos
+      summary: Obtener todos los actores asociados a un contenido
+      description: Devuelve una lista de actores asociados al contenido especificado
+        por su ID.
+      operationId: contenidos_id_contenido_actores_get
+      parameters:
+      - name: id_contenido
+        in: path
+        description: ID del contenido para el cual se desean obtener los actores asociados
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Lista de actores asociados al contenido
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Actor'
+                x-content-type: application/json
+        "404":
+          description: Contenido no encontrado o sin actores asociados
+      x-openapi-router-controller: swagger_server.controllers.contenidos_controller
+  /contenidos/filtrar:
+    get:
+      tags:
+      - Contenidos
+      summary: "Filtrar contenidos por nombre, actor y género"
+      description: "Devuelve una lista de contenidos que coincidan con el nombre,\
+        \ actor o género especificado."
+      operationId: contenidos_filtrar_get
+      parameters:
+      - name: titulo
+        in: query
+        description: Nombre o título parcial del contenido a buscar
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: nombre_actor
+        in: query
+        description: Nombre del actor para filtrar los contenidos asociados a dicho
+          actor
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: nombre_genero
+        in: query
+        description: Nombre del género para filtrar los contenidos asociados a dicho
+          género
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Lista de contenidos que coinciden con los filtros aplicados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contenido'
+                x-content-type: application/json
+        "404":
+          description: No se encontraron contenidos que coincidan con los filtros
+      x-openapi-router-controller: swagger_server.controllers.contenidos_controller
+  /contenidos/{id_contenido}/episodios:
+    get:
+      tags:
+      - Contenidos
+      summary: Obtener todos los episodios asociados a un contenido
+      description: Devuelve una lista de episodios asociados al contenido especificado
+        por su ID.
+      operationId: contenidos_id_contenido_episodios_get
+      parameters:
+      - name: id_contenido
+        in: path
+        description: ID del contenido para el cual se desean obtener los episodios
+          asociados
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Lista de episodios asociados al contenido
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Episodio'
+                x-content-type: application/json
+        "404":
+          description: Contenido no encontrado o sin episodios asociados
+      x-openapi-router-controller: swagger_server.controllers.contenidos_controller
+  /contenidos/{id_contenido}:
+    get:
+      tags:
+      - Contenidos
+      summary: Obtener un contenido por ID
+      operationId: contenidos_id_contenido_get
+      parameters:
+      - name: id_contenido
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Contenido encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contenido'
+        "404":
+          description: Contenido no encontrado
+      x-openapi-router-controller: swagger_server.controllers.contenidos_controller
+    delete:
+      tags:
+      - Contenidos
+      summary: Eliminar un contenido
+      operationId: contenidos_id_contenido_delete
+      parameters:
+      - name: id_contenido
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "204":
+          description: Contenido eliminado
+      x-openapi-router-controller: swagger_server.controllers.contenidos_controller
+  /episodios:
+    get:
+      tags:
+      - Episodios
+      summary: Obtener todos los episodios
+      operationId: episodios_get
+      responses:
+        "200":
+          description: Lista de episodios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Episodio'
+                x-content-type: application/json
+      x-openapi-router-controller: swagger_server.controllers.episodios_controller
+    put:
+      tags:
+      - Episodios
+      summary: Actualizar un episodio
+      operationId: episodios_put
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Episodio'
+        required: true
+      responses:
+        "200":
+          description: Episodio actualizado
+      x-openapi-router-controller: swagger_server.controllers.episodios_controller
+    post:
+      tags:
+      - Episodios
+      summary: Crear un nuevo episodio
+      operationId: episodios_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Episodio'
+        required: true
+      responses:
+        "201":
+          description: Episodio creado
+      x-openapi-router-controller: swagger_server.controllers.episodios_controller
+  /episodios/{id_episodio}:
+    get:
+      tags:
+      - Episodios
+      summary: Obtener un episodio por ID
+      operationId: episodios_id_episodio_get
+      parameters:
+      - name: id_episodio
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Episodio encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Episodio'
+        "404":
+          description: Episodio no encontrado
+      x-openapi-router-controller: swagger_server.controllers.episodios_controller
+    delete:
+      tags:
+      - Episodios
+      summary: Eliminar un episodio
+      operationId: episodios_id_episodio_delete
+      parameters:
+      - name: id_episodio
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "204":
+          description: Episodio eliminado
+      x-openapi-router-controller: swagger_server.controllers.episodios_controller
+  /actores:
+    get:
+      tags:
+      - Actor
+      summary: Obtener todos los actores
+      operationId: actores_get
+      responses:
+        "200":
+          description: Lista de actores
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Actor'
+                x-content-type: application/json
+      x-openapi-router-controller: swagger_server.controllers.actor_controller
+    put:
+      tags:
+      - Actor
+      summary: Actualizar un actor
+      operationId: actores_put
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Actor'
+        required: true
+      responses:
+        "200":
+          description: Actor actualizado
+      x-openapi-router-controller: swagger_server.controllers.actor_controller
+    post:
+      tags:
+      - Actor
+      summary: Crear un nuevo actor
+      operationId: actores_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Actor'
+        required: true
+      responses:
+        "201":
+          description: Actor creado
+      x-openapi-router-controller: swagger_server.controllers.actor_controller
+  /actores/{id_actor}/contenidos:
+    get:
+      tags:
+      - Actor
+      summary: Obtener todos los contenidos asociados a un actor
+      description: "Devuelve una lista de contenidos asociados a un actor, dado su\
+        \ ID."
+      operationId: actores_id_actor_contenidos_get
+      parameters:
+      - name: id_actor
+        in: path
+        description: ID del actor para obtener los contenidos asociados
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Lista de contenidos asociados al actor
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contenido'
+                x-content-type: application/json
+        "404":
+          description: Actor no encontrado
+      x-openapi-router-controller: swagger_server.controllers.actor_controller
+  /actores/{id_actor}:
+    get:
+      tags:
+      - Actor
+      summary: Obtener un actor por ID
+      operationId: actores_id_actor_get
+      parameters:
+      - name: id_actor
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Actor encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Actor'
+        "404":
+          description: Actor no encontrado
+      x-openapi-router-controller: swagger_server.controllers.actor_controller
+    delete:
+      tags:
+      - Actor
+      summary: Eliminar un actor
+      operationId: actores_id_actor_delete
+      parameters:
+      - name: id_actor
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "204":
+          description: Actor eliminado
+      x-openapi-router-controller: swagger_server.controllers.actor_controller
+  /generos:
+    get:
+      tags:
+      - Genero
+      summary: Obtener todos los géneros
+      operationId: generos_get
+      responses:
+        "200":
+          description: Lista de géneros
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Genero'
+                x-content-type: application/json
+      x-openapi-router-controller: swagger_server.controllers.genero_controller
+    put:
+      tags:
+      - Genero
+      summary: Actualizar un género
+      description: Actualiza los datos de un género existente.
+      operationId: generos_put
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Genero'
+        required: true
+      responses:
+        "200":
+          description: Género actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Genero'
+        "400":
+          description: Error en la solicitud
+        "404":
+          description: Género no encontrado
+      x-openapi-router-controller: swagger_server.controllers.genero_controller
+    post:
+      tags:
+      - Genero
+      summary: Crear un nuevo género
+      operationId: generos_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Genero'
+        required: true
+      responses:
+        "201":
+          description: Género creado
+      x-openapi-router-controller: swagger_server.controllers.genero_controller
+  /generos/{id_genero}/contenidos:
+    get:
+      tags:
+      - Genero
+      summary: Obtener todos los contenidos asociados a un género
+      description: "Devuelve una lista de contenidos asociados a un género, dado su\
+        \ ID."
+      operationId: generos_id_genero_contenidos_get
+      parameters:
+      - name: id_genero
+        in: path
+        description: ID del género para obtener los contenidos asociados
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Lista de contenidos asociados al género
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contenido'
+                x-content-type: application/json
+        "404":
+          description: Género no encontrado
+      x-openapi-router-controller: swagger_server.controllers.genero_controller
+  /generos/{id_genero}:
+    delete:
+      tags:
+      - Genero
+      summary: Eliminar un género
+      description: Elimina un género por su ID.
+      operationId: generos_id_genero_delete
+      parameters:
+      - name: id_genero
+        in: path
+        description: ID del género a eliminar
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "204":
+          description: Género eliminado correctamente (sin contenido)
+        "404":
+          description: Género no encontrado
+      x-openapi-router-controller: swagger_server.controllers.genero_controller
+components:
+  schemas:
+    Contenido:
+      type: object
+      properties:
+        id_contenido:
+          type: integer
+          example: 1
+        titulo:
+          type: string
+          example: Película A
+        descripcion:
+          type: string
+          example: Descripción de la película o serie
+        tipo:
+          type: string
+          example: pelicula
+          enum:
+          - pelicula
+          - serie
+        fecha_lanzamiento:
+          type: string
+          format: date
+          example: 2023-05-01
+        duracion:
+          type: integer
+          example: 120
+        trailer_url:
+          type: string
+          example: http://example.com/trailer
+        portada_url:
+          type: string
+          example: http://example.com/portada
+        stream_url:
+          type: string
+          nullable: true
+          example: http://example.com/stream
+      example:
+        descripcion: Descripción de la película o serie
+        portada_url: http://example.com/portada
+        tipo: pelicula
+        fecha_lanzamiento: 2023-05-01T00:00:00.000+00:00
+        titulo: Película A
+        duracion: 120
+        id_contenido: 1
+        stream_url: http://example.com/stream
+        trailer_url: http://example.com/trailer
+    Episodio:
+      type: object
+      properties:
+        id_episodio:
+          type: integer
+          example: 1
+        id_contenido:
+          type: integer
+          example: 1
+        num_temporada:
+          type: integer
+          example: 1
+        num_episodio:
+          type: integer
+          example: 1
+        titulo:
+          type: string
+          example: Episodio 1
+        descripcion:
+          type: string
+          example: Descripción del episodio
+        duracion:
+          type: integer
+          example: 45
+        stream_url:
+          type: string
+          example: http://example.com/stream
+      example:
+        num_temporada: 1
+        descripcion: Descripción del episodio
+        num_episodio: 1
+        titulo: Episodio 1
+        duracion: 45
+        id_contenido: 1
+        id_episodio: 1
+        stream_url: http://example.com/stream
+    ContenidoActor:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        id_contenido:
+          type: integer
+          example: 1
+        id_actor:
+          type: integer
+          example: 1
+    ContenidoGenero:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        id_contenido:
+          type: integer
+          example: 1
+        id_genero:
+          type: integer
+          example: 1
+    Actor:
+      type: object
+      properties:
+        id_actor:
+          type: integer
+          example: 1
+        nombre:
+          type: string
+          example: John
+        apellidos:
+          type: string
+          example: Doe
+        fecha_nac:
+          type: string
+          format: date
+          example: 1990-05-15
+        imagen_url:
+          type: string
+          example: http://example.com/actor.jpg
+        descripcion:
+          type: string
+          example: Descripción del actor
+      example:
+        apellidos: Doe
+        descripcion: Descripción del actor
+        fecha_nac: 1990-05-15T00:00:00.000+00:00
+        imagen_url: http://example.com/actor.jpg
+        id_actor: 1
+        nombre: John
+    Genero:
+      type: object
+      properties:
+        id_genero:
+          type: integer
+          example: 1
+        nombre:
+          type: string
+          example: Acción
+        descripcion:
+          type: string
+          example: Descripción del género
+      example:
+        descripcion: Descripción del género
+        id_genero: 1
+        nombre: Acción
+    contenidos_body:
+      type: object
+      properties:
+        titulo:
+          type: string
+          example: Película B
+        descripcion:
+          type: string
+          example: Descripción actualizada de la película o serie
+        tipo:
+          type: string
+          example: pelicula
+          enum:
+          - pelicula
+          - serie
+        fecha_lanzamiento:
+          type: string
+          format: date
+          example: 2023-06-01
+        duracion:
+          type: integer
+          example: 130
+        trailer_url:
+          type: string
+          example: http://example.com/trailer-actualizado
+        portada_url:
+          type: string
+          example: http://example.com/portada-actualizada
+        stream_url:
+          type: string
+          nullable: true
+          example: http://example.com/stream-actualizado
+        id_actores:
+          type: array
+          description: Lista de IDs de actores asociados al contenido
+          example:
+          - 1
+          - 2
+          - 3
+          items:
+            type: integer
+        id_generos:
+          type: array
+          description: Lista de IDs de géneros asociados al contenido
+          example:
+          - 4
+          - 5
+          items:
+            type: integer
+    contenidos_body_1:
+      type: object
+      properties:
+        titulo:
+          type: string
+          example: Película B
+        descripcion:
+          type: string
+          example: Descripción de la película o serie
+        tipo:
+          type: string
+          example: pelicula
+          enum:
+          - pelicula
+          - serie
+        fecha_lanzamiento:
+          type: string
+          format: date
+          example: 2023-06-01
+        duracion:
+          type: integer
+          example: 130
+        trailer_url:
+          type: string
+          example: http://example.com/trailer
+        portada_url:
+          type: string
+          example: http://example.com/portada
+        stream_url:
+          type: string
+          nullable: true
+          example: http://example.com/stream
+        id_actores:
+          type: array
+          description: Lista de IDs de actores asociados al contenido
+          example:
+          - 1
+          - 2
+          - 3
+          items:
+            type: integer
+        id_generos:
+          type: array
+          description: Lista de IDs de géneros asociados al contenido
+          example:
+          - 4
+          - 5
+          items:
+            type: integer
+
