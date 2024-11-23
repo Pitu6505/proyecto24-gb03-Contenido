@@ -98,6 +98,7 @@ def contenidos_id_contenido_delete(id_contenido):  # noqa: E501
     except Exception as e:
         print(f"Error al eliminar el contenido: {e}")
         return "Error interno del servidor", 500
+    
 
 
 def contenidos_id_contenido_episodios_get(id_contenido):  # noqa: E501
