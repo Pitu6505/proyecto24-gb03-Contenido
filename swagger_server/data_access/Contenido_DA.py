@@ -58,6 +58,7 @@ class Contenido_DA:
 
     def update_content(id: int, new_content: Contenido):
          content = db.query(db_contenido).filter(db_contenido.id_contenido == id).first()
+         # Update content
          if content:
             content.titulo = new_content.titulo
             content.descripcion = new_content.descripcion
@@ -69,16 +70,22 @@ class Contenido_DA:
             content.trailer_url = new_content.trailer_url
               # Update actors and genres
             content.actores = []
+            # Add actors and genres
             if new_content.id_actores:
+                    # Add actors and genres
                     for actor_id in new_content.id_actores:
                         actor = db.query(Actor).get(actor_id)
+                        # Check if actor exists
                         if actor:
                             content.actores.append(actor)
 
             content.generos = []
+            # Add actors and genres
             if new_content.id_generos:
+                    # Add actors and genres
                     for genero_id in new_content.id_generos:
                         genero = db.query(Genero).get(genero_id)
+                        # Comprueba si el genero existe
                         if genero:
                             content.generos.append(genero)
             db.commit()

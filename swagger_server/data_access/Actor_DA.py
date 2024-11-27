@@ -4,6 +4,7 @@ from swagger_server.database_setup import db , Actor as db_actor
 
 class Actor_DA:
 
+    # Clase para acceder a la base de datos y realizar operaciones CRUD sobre la tabla de actores
     def __init__(self) -> None:
         pass
 
@@ -24,7 +25,7 @@ class Actor_DA:
             print(e)
             return None
         
-    def delete_actor(id: int):
+    def delete_actor(self,id: int):
         actor = db.query(db_actor).filter(db_actor.id_actor == id).first()
         if actor:
             db.delete(actor)
