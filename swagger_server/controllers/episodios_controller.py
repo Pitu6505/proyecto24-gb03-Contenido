@@ -23,7 +23,7 @@ def episodios_get():  # noqa: E501
         return jsonify([episodio.to_dict() for episodio in episodios]), 200
     except Exception as e:
         print(f"Error al obtener los episodios: {e}")
-        return jsonify({"error": "Error interno del servidor"}), 500
+        return jsonify({"error": "Error interno del servidor en el get"}), 500
 
 
 def episodios_id_episodio_delete(id_episodio):  # noqa: E501
@@ -41,10 +41,10 @@ def episodios_id_episodio_delete(id_episodio):  # noqa: E501
         if result:
             return jsonify({"message": "Episodio eliminado exitosamente"}), 200
         else:
-            return jsonify({"error": "Episodio no encontrado"}), 404
+            return jsonify({"error": "Episodio no encontrado en el delete en el liente"}), 404
     except Exception as e:
         print(f"Error al eliminar el episodio: {e}")
-        return jsonify({"error": "Error interno del servidor"}), 500
+        return jsonify({"error": "Error interno del servidor en el delete"}), 500
 
 
 def episodios_id_episodio_get(id_episodio):  # noqa: E501
@@ -60,11 +60,11 @@ def episodios_id_episodio_get(id_episodio):  # noqa: E501
     try:
         episodio = Episodio_DA.get_episode_by_id(id_episodio)
         if episodio is None:
-            return jsonify({"error": "Episodio no encontrado"}), 404
+            return jsonify({"error": "Episodio no encontrado por el cliente"}), 404
         return jsonify(episodio.to_dict()), 200
     except Exception as e:
         print(f"Error al obtener el episodio: {e}")
-        return jsonify({"error": "Error interno del servidor"}), 500
+        return jsonify({"error": "Error interno del servidor en el id_episodio_get "}), 500
 
 
 def episodios_post(body):  # noqa: E501
@@ -84,12 +84,12 @@ def episodios_post(body):  # noqa: E501
             if nuevo_episodio:
                 return jsonify({"message": "Episodio creado exitosamente"}), 201
             else:
-                return jsonify({"error": "Error al crear el episodio"}), 500
+                return jsonify({"error": "Error al crear el episodio, en el post"}), 500
         else:
             return jsonify({"error": "El cuerpo de la solicitud no es JSON"}), 400
     except Exception as e:
         print(f"Error al crear el episodio: {e}")
-        return jsonify({"error": "Error interno del servidor"}), 500
+        return jsonify({"error": "Error interno del servidor en el post"}), 500
 
 
 def episodios_put(body):  # noqa: E501
@@ -109,9 +109,9 @@ def episodios_put(body):  # noqa: E501
             if episodio_actualizado:
                 return jsonify({"message": "Episodio actualizado exitosamente"}), 200
             else:
-                return jsonify({"error": "Episodio no encontrado"}), 404
+                return jsonify({"error": "Episodio no encontrado en el cliente en el put"}), 404
         else:
             return jsonify({"error": "El cuerpo de la solicitud no es JSON"}), 400
     except Exception as e:
         print(f"Error al actualizar el episodio: {e}")
-        return jsonify({"error": "Error interno del servidor"}), 500
+        return jsonify({"error": "Error interno del servidor en el put "}), 500
