@@ -24,7 +24,7 @@ def actores_get():  # noqa: E501
         return jsonify([actor.to_dict() for actor in actores]), 200
     except Exception as e:
         print(f"Error al obtener los actores: {e}")
-        return jsonify({"error": "Error interno del servidor"}), 500
+        return jsonify({"error": "Error interno del servidor para el metodo get"}), 500
 
 
 def actores_id_actor_contenidos_get(id_actor):  # noqa: E501
@@ -62,10 +62,10 @@ def actores_id_actor_delete(id_actor):  # noqa: E501
         if result:
             return jsonify({"message": "Actor eliminado exitosamente"}), 200
         else:
-            return jsonify({"error": "Actor no encontrado"}), 404
+            return jsonify({"error": "Actor no encontrado para el metodo delete"}), 404
     except Exception as e:
         print(f"Error al eliminar el actor: {e}")
-        return jsonify({"error": "Error interno del servidor"}), 500
+        return jsonify({"error": "Error interno del servidor para el metodo delete"}), 500
 
 
 def actores_id_actor_get(id_actor):  # noqa: E501
@@ -81,11 +81,11 @@ def actores_id_actor_get(id_actor):  # noqa: E501
     try:
         actor = Actor_DA.get_actor_by_id(id_actor)
         if actor is None:
-            return jsonify({"error": "Actor no encontrado"}), 404
+            return jsonify({"error": "Actor no encontrado para el metodo get by id""}), 404
         return jsonify(actor.to_dict()), 200
     except Exception as e:
         print(f"Error al obtener el actor: {e}")
-        return jsonify({"error": "Error interno del servidor"}), 500
+        return jsonify({"error": "Error interno del servidor para el metodo get by id"}), 500
 
 
 def actores_post(body):  # noqa: E501
@@ -112,7 +112,7 @@ def actores_post(body):  # noqa: E501
             return jsonify({"error": "El cuerpo de la solicitud no es JSON"}), 400
     except Exception as e:
         print(f"Error al crear el actor: {e}")
-        return jsonify({"error": "Error interno del servidor"}), 500
+        return jsonify({"error": "Error interno del servidor para el metodo post"}), 500
 
 
 
@@ -139,4 +139,4 @@ def actores_put(body):  # noqa: E501
             return jsonify({"error": "El cuerpo de la solicitud no es JSON"}), 400
     except Exception as e:
         print(f"Error al actualizar el actor: {e}")
-        return jsonify({"error": "Error interno del servidor"}), 500
+        return jsonify({"error": "Error interno del servidor para el metodo put"}), 500

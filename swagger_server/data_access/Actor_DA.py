@@ -7,6 +7,8 @@ class Actor_DA:
     def __init__(self) -> None:
         pass
 
+    # Metodos CRUD
+    # Metodo para crear un actor en la base de datos a partir de un objeto Actor
     def create_actor(actor: Actor):
         try:
             new_actor = db_actor(
