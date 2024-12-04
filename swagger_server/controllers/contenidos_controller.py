@@ -51,7 +51,7 @@ def contenidos_get():  # noqa: E501
         return [contenido.to_dict() for contenido in contenidos]
     except Exception as e:
         print("Error al obtener los contenidos")
-        return "Error", 500
+        return str(e), 500
 
 
 def contenidos_id_contenido_actores_get(id_contenido):  # noqa: E501
