@@ -100,10 +100,10 @@ def actores_post(body):  # noqa: E501
     """
     try:
         if connexion.request.is_json:
-            body = Actor.from_dict(connexion.request.get_json())  # noqa: E501
+            actor = Actor.from_dict(connexion.request.get_json())  # noqa: E501
             print("Body:")
-            print(body)
-            nuevo_actor = Actor_DA.create_actor(body)
+            print(actor)
+            nuevo_actor = Actor_DA.create_actor(actor)
             if nuevo_actor:
                 return jsonify({"message": "Actor creado exitosamente"}), 201
             else:
