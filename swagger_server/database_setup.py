@@ -1,4 +1,4 @@
-from sqlalchemy import *
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Table, Date, DateTime
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import class_mapper
